@@ -62,6 +62,19 @@
     {% for id in ids %}
         <div id="{{id}}"></div>
     {% endfor %}
+    
+</div>
+<div class="container">
+{% for id in ids %}
+    <div id="{{id}}"></div>
+   {% endfor %}
+
+</div>
+<div class="container">
+{% for id2 in ids2 %}
+    <div id="{{id2}}"></div>
+   {% endfor %}
+
 </div>
 
 <script type="text/javascript">
@@ -70,6 +83,17 @@
     for(let i in graphs) {
         Plotly.plot(ids[i], graphs[i].data, graphs[i].layout);
     }
+
+    const graphs2 = {{graphJSON2 | safe}};
+    const ids2 = {{ids2 | safe}};
+    for(let i in graphs2) {
+        Plotly.plot(ids2[i], graphs2[i].data, graphs2[i].layout);
+    }
+
+    
+    //for(let i in graphs) {
+     //   Plotly.plot(ids[i], graphs[i].data, graphs[i].layout);
+    //}
 </script>
 
 </body>

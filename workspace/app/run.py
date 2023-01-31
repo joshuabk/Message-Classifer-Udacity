@@ -40,8 +40,23 @@ def index():
     
     # extract data needed for visuals
     # TODO: Below is an example - modify to extract data for your own visuals
+    sumTemp = df.drop(['id', 'message','genre'], axis = 1)  
+   
+    #print(sums)
+    totals = pd.DataFrame(columns=['Category', 'Total'])
+    totals['Category'] = sumTemp.sum(axis = 0).keys()
+    totals['Total'] = sumTemp.sum(axis = 0).values
+    
+    print(totals['Category'])
+    totals  = totals.sort_values("Total", ascending=False)
+    print(totals[:5])
+    topTot = totals[1:6]
+    #print(sums.sort_values("count"))
     genre_counts = df.groupby('genre').count()['message']
+
     genre_names = list(genre_counts.index)
+
+   
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -65,13 +80,38 @@ def index():
             }
         }
     ]
-    
+    graphs2 = [
+        {
+            'data': [
+                Bar(
+                    x=topTot["Category"],
+                    y=topTot["Total"]
+                )
+            ],
+
+            'layout': {
+                'title': 'Top Categories',
+                'yaxis': {
+                    'title': "Total"
+                },
+                'xaxis': {
+                    'title': "Category"
+                }
+            }
+        }
+    ] 
+
+
     # encode plotly graphs in JSON
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
+
+
+    ids2 = ["graph2-{}".format(i) for i, _ in enumerate(graphs2)]
+    graphJSON2 = json.dumps(graphs2, cls=plotly.utils.PlotlyJSONEncoder)
     
     # render web page with plotly graphs
-    return render_template('master.html', ids=ids, graphJSON=graphJSON)
+    return render_template('master.html', ids=ids, graphJSON=graphJSON, ids2 = ids2, graphJSON2 = graphJSON2)
 
 
 # web page that handles user query and displays model results
